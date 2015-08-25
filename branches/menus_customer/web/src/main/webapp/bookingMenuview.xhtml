@@ -1,0 +1,24 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	    		 xmlns:ui="http://java.sun.com/jsf/facelets"
+	  			 xmlns:h="http://java.sun.com/jsf/html"
+	  			 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:s="http://jboss.org/schema/seam/taglib">
+    
+    <s:decorate id="DecorateName" template="display.xhtml">             
+		<ui:define name="label">菜谱(价格):</ui:define>
+		#{booking.menu.name}(#{booking.menu.price})
+	</s:decorate>
+	
+    <s:decorate id="DecorateAddress" template="display.xhtml">             
+		<ui:define name="label">描述:</ui:define>
+		#{booking.menu.description}
+	</s:decorate>
+	
+    <s:decorate id="DecorateCity" template="display.xhtml">             
+		<ui:define name="label">店家（地址）:</ui:define>
+		#{booking.menu.seller.displayName}(#{booking.menu.seller.address})
+	</s:decorate>
+	
+   
+</ui:composition>

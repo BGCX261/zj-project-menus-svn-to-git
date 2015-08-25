@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:s="http://jboss.org/schema/seam/taglib"
+      xmlns:a="http://richfaces.org/a4j"
+		template="template.xhtml">
+
+	
+	
+		<!-- sidebar -->
+		<ui:define name="sidebar">
+			
+			<h1>State management in Seam</h1>
+			<p>
+			    Robust applications need data validation in several different places. Seam integrates Hibernate Validator,
+			    a set of annotations for expressing data model constraints in your domain model classes. Then, these 
+			    constraints are applied almost completely transparently at three levels of the application: by Seam when 
+			    the user first enters data, by EJB before persisting data to the database, and, if you use Hibernate to 
+			    generate your database schema, by the database constraints themselves. Multi-layer validation hardens
+			    your application and protects your data. Even better, it's self-documenting, and easy to change when
+			    your business rules change.
+			</p>
+			<p>
+			   <a href="#" onclick="window.open('exp/registerExp.html','exp','width=752,height=500,scrollbars=yes');">
+			      What happens when I register?
+			   </a>
+			</p>
+		
+		</ui:define>
+		
+		<!-- content -->
+		<ui:define name="content">
+		
+			<div class="section">
+				<h1>设置</h1>
+			</div>
+			
+			<div class="section">
+                
+				<div class="entry errors">
+					<h:messages id="messages" globalOnly="true"/>
+				</div>
+
+                <h:form id="setting">
+				<fieldset>
+				
+					<s:decorate id="usernameDecorate" template="edit.xhtml">
+						<ui:define name="label">用户名:</ui:define>
+						<h:inputText id="username" value="#{user.username}" required="true" readonly="true"/>
+					</s:decorate>
+					
+					<s:decorate id="nameDecorate" template="edit.xhtml">
+						<ui:define name="label">姓名:</ui:define>
+						<h:inputText id="name" value="#{user.name}" required="true"/>
+					</s:decorate>
+					
+					<s:decorate id="addressDecorate" template="edit.xhtml">
+						<ui:define name="label">地址:</ui:define>
+						<h:inputText id="address" value="#{user.address}" required="true"/>
+					</s:decorate>
+					
+					<s:decorate id="telDecorate" template="edit.xhtml">
+						<ui:define name="label">电话:</ui:define>
+						<h:inputText id="tel" value="#{user.tel}" required="true"/>
+					</s:decorate>
+					
+					<s:decorate id="descriptionDecorate" template="edit.xhtml">
+						<ui:define name="label">个人备注:</ui:define>
+						<h:inputText id="description" value="#{user.description}" required="false"/>
+					</s:decorate>
+					
+					<div class="buttonBox">
+						<h:commandButton id="settingBt" value="保存" action="#{userSetting.update}"/>
+						&#160;
+						<s:button id="cancel" value="返回" view="/menuSearch.xhtml"/>
+					</div>
+									
+				</fieldset>
+                </h:form>
+                
+			</div>
+		</ui:define>
+
+</ui:composition>

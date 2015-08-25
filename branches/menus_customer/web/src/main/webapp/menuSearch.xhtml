@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/schema/seam/taglib"
+      xmlns:a="http://richfaces.org/a4j"
+      template="template.xhtml">
+
+	
+		<!-- sidebar -->
+		<ui:define name="sidebar">
+            
+			
+				
+                <div class="subnotes">
+                    #{identity.username} , you are welcome!
+                    
+                </div>
+			
+            
+		
+	</ui:define>
+		<!-- content -->
+		<ui:define name="content">
+			<div class="section">
+  
+			    <span class="errors">
+			       <h:messages id="messages" globalOnly="true"/>
+			    </span>
+			    
+			    <h1>搜索菜谱</h1>
+			
+				<h:form id="searchCriteria">
+				<fieldset>
+			       <h:inputText id="searchString" value="#{menusSearch.searchString}" style="width: 165px;">
+			        <a:ajax event="keyup" render="searchResults" listener="#{menusSearch.find}"/>
+			       </h:inputText>                     
+			       &#160;
+				   <a:commandButton id="findmenus" value="Find menus" actionListener="#{menusSearch.find}"  render="searchResults"/>
+			       &#160;
+			       <a:status id="status">
+			          <f:facet id="StartStatus" name="start">
+			             <h:graphicImage id="SpinnerGif" value="/img/spinner.gif"/>
+			          </f:facet>
+			       </a:status>
+				   <br/>
+			       <h:outputLabel id="MaximumResultsLabel" for="pageSize">Maximum results:</h:outputLabel>&#160;
+			       <h:selectOneMenu id="pageSize" value="#{menusSearch.pageSize}">
+			          <f:selectItem id="PageSize5" itemLabel="5" itemValue="5"/>
+			          <f:selectItem id="PageSize10" itemLabel="10" itemValue="10"/>
+			          <f:selectItem id="PageSize20" itemLabel="20" itemValue="20"/>
+			       </h:selectOneMenu>
+			    </fieldset>
+			    </h:form>
+			    
+			</div>
+			
+			<a:outputPanel id="searchResults">
+				<div class="section">
+					<h:outputText id="NoHotelsFoundMessage" value="No menus Found" rendered="#{menus != null and menus.rowCount==0}"/>
+					<h:dataTable id="menus" value="#{menus}" var="menu" rendered="#{menus.rowCount>0}">
+						
+						<h:column id="column6">
+							<f:facet id="NameFacet" name="header">菜谱</f:facet>
+							<s:link id="viewMenu" value="#{menu.name}" action="#{menusSearch.selectMenu(menu)}"/>
+						</h:column>
+						
+						<h:column id="column1">
+							<f:facet id="NameFacet" name="header">描述</f:facet>
+							#{menu.description}
+						</h:column>
+						<h:column id="column2">
+							<f:facet id="AddressFacet" name="header">价格</f:facet>
+							#{menu.price}
+						</h:column>						
+						<h:column id="column4">
+							<f:facet id="ZipFacet" name="header">店家</f:facet>
+							#{menu.seller.displayName}
+						</h:column>
+						<h:column id="column5">
+							<f:facet id="ActionFacet" name="header">Action</f:facet>
+							<s:link id="viewHotel" value="View Hotel" action="#{hotelBooking.selectHotel(menu)}"/>
+						</h:column>
+					</h:dataTable>
+					<s:link id="MoreResultsLink" value="More results" action="#{menusSearch.nextPage}" rendered="#{menusSearch.nextPageAvailable}"/>
+				  </div>  
+			</a:outputPanel>
+		</ui:define>
+	
+
+</ui:composition>

@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/schema/seam/taglib"
+      xmlns:a="http://richfaces.org/a4j"
+      template="template.xhtml">
+
+	
+		<!-- sidebar -->
+		<ui:define name="sidebar">
+            
+			
+				
+                <div class="subnotes">
+                    #{identity.username} , you are welcome!
+                    
+                </div>
+			
+            
+		
+	</ui:define>
+		<!-- content -->
+		<ui:define name="content">
+			<div class="section">
+  
+			    <span class="errors">
+			       <h:messages id="messages" globalOnly="true"/>
+			    </span>
+			    
+			    <h1>我的餐车</h1>
+			    
+			</div>
+			
+			<f:subview id="emptycart" rendered="#{empty cart.cart}">
+                <p>Your cart is empty.</p>
+
+                <h:form id="EmptyCartForm">
+                    <h:commandButton id="ContinueShoppingButton" action="/menuSearch.xhtml" value="继续选餐" />
+                </h:form>
+            </f:subview>
+
+            <f:subview id="cartdetails" rendered="#{not empty cart.cart}">
+                <h:form id="CartDetailsForm">
+                    <h:dataTable id="CartItemsTable"
+                                 value="#{cart.cart}" var="item">
+                        <h:column id="column1">
+                            <f:facet id="CartRemoveFacet" name="header">
+                                <h:outputText id="CartRemoveText" value="移除" />
+                            </f:facet>
+                            <h:selectBooleanCheckbox id="CartRemoveCheckbox" value="#{cart.cartSelection[item]}"/>
+                        </h:column>
+                        <h:column id="column2">
+                            <f:facet id="TitleFacet" name="header">
+                                <h:outputText id="TitleText" value="菜谱" />
+                            </f:facet>
+                            <h:outputText id="TitleValueText" value="#{item.menu.name}" />
+                        </h:column>                        
+                        <h:column id="column3">
+                            <f:facet id="ActorFacet" name="header">
+                                <h:outputText id="ActorText" value="店家" />
+                            </f:facet>
+                                <h:outputText id="ActorValueText" value="#{item.menu.seller.displayName}" />
+                        </h:column>                        
+                        
+                        <h:column id="column4">
+                            <f:facet id="PriceFacet" name="header">
+                                <h:outputText id="PriceText" value="价格" />
+                            </f:facet>
+                            <h:outputText id="PriceValueText" value="#{item.menu.price}">
+                                <f:convertNumber type="currency" currencySymbol="￥" />
+                            </h:outputText>
+                        </h:column>                        
+                        <h:column id="column5">
+                            <f:facet id="QuantityFacet" name="header">
+                                <h:outputText id="QuantityText" value="数量" />
+                            </f:facet>
+                            <h:inputText id="QuantityValueText" value="#{item.quantity}" size="6" />
+                        </h:column>                        
+                    </h:dataTable>
+                    <h:commandButton id="ContinueShoppingButton"
+                                     action="/menuSearch.xhtml"  
+                                     value="继续选餐" />
+                    &#160;
+                    <h:commandButton id="ResetCartButton"
+                                     action="#{cart.resetCart}"  
+                                     value="清空餐车"  />
+                    &#160;
+                    <h:commandButton id="UpdateCartButton"
+                                     action="#{cart.updateCart}" 
+                                     value="更新餐车" />
+                </h:form>
+                
+                <div style="width: 100%;">
+                    <div class="cntInfo" style="float:right;">
+                        <h:panelGrid id="CostSummary" columns="2">                            
+                            
+                            <h:outputText id="CartTotalText" value="总价格" />
+                            <h:outputText id="CartTotalValue" value="#{cart.total}">
+                                <f:convertNumber type="currency" currencySymbol="￥" />
+                            </h:outputText>
+                        </h:panelGrid>
+                        
+                        
+                        <f:subview id="purchaseaction" rendered="#{identity.loggedIn}">
+                            <h:form id="PurchaseActionForm">
+                                <h:commandButton id="PurchaseButton"
+                                                 action="#{menuBooking.confirm}"  
+                                                 value="提交订单"  />
+                            </h:form>
+                        </f:subview>
+                    </div>
+                    
+                    <f:subview id="notloggedin" rendered="#{!identity.loggedIn}">
+                        <p class="warning">You must be logged in to place an order</p>
+                    </f:subview>
+                </div>
+            </f:subview>
+		</ui:define>
+	
+
+</ui:composition>
